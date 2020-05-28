@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 import {
 	StyledGame,
 	StyledScore,
@@ -8,17 +9,48 @@ import {
 import { Strong } from '../styled/Random';
 
 export default function Game() {
+	const history = useHistory();
+	const MAX_SECONDS = 5;
+
 	const [score, setScore] = useState(0);
+	const [ms, setMs] = useState(0);
+	const [seconds, setSeconds] = useState(MAX_SECONDS);
+
+	const updateTime = (startTime) => {
+		const endTime = new Date();
+		const msPassedStr = (endTime.getTime() - startTime.getTime()).toString();
+		const formattedMSString = ('0000' + msPassedStr).slice(-5);
+		const updatedSeconds =
+			MAX_SECONDS - parseInt(formattedMSString.substring(0, 2)) - 1;
+		const updatedMs =
+			1000 -
+			parseInt(formattedMSString.substring(formattedMSString.length - 3));
+		setSeconds(addLeadingZeros(updatedSeconds, 2));
+		setMs(addLeadingZeros(updatedMs, 3));
+	};
 
 	useEffect(() => {
-		const interval = setInterval(() => {
-			setScore((prevScore) => prevScore + 1);
-		}, 1000);
+		const currentTime = new Date();
+		const interval = setInterval(() => updateTime(currentTime), 1);
+		return () => clearInterval(interval);
 
-		return () => {
-			clearInterval(interval);
-		};
-	}, [score]);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
+
+	const addLeadingZeros = (num, length) => {
+		let zeros = '';
+		for (let i = 0; i < length; i++) {
+			zeros += '0';
+		}
+
+		return (zeros + num).slice(-length);
+	};
+
+	useEffect(() => {
+		if (seconds <= -1) {
+			history.push('/gameOver');
+		}
+	}, [seconds, history]);
 
 	return (
 		<StyledGame>
@@ -27,7 +59,10 @@ export default function Game() {
 			</StyledScore>
 			<StyledCharacter>A</StyledCharacter>
 			<StyledTimer>
-				Time: <Strong>00: 000</Strong>
+				Time:{' '}
+				<Strong>
+					{seconds}: {ms}
+				</Strong>
 			</StyledTimer>
 		</StyledGame>
 	);
