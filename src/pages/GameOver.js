@@ -3,6 +3,7 @@ import { useScore } from '../contexts/ScoreContext';
 import { useHistory } from 'react-router-dom';
 import { StyledLink } from '../styled/Navbar';
 import { StyledCharacter } from '../styled/Game';
+import { StyledTitle } from '../styled/Random';
 
 export default function GameOver() {
 	const history = useHistory();
@@ -38,11 +39,15 @@ export default function GameOver() {
 
 	return (
 		<div>
-			<h1>Game Over</h1>
+			<StyledTitle>Game Over</StyledTitle>
+			<h2>{scoreMessage}</h2>
 			<StyledCharacter>{score}</StyledCharacter>
-			<p>{scoreMessage}</p>
-			<StyledLink to="/">Go Home</StyledLink>
-			<StyledLink to="/game">Play Again</StyledLink>
+			<div>
+				<StyledLink to="/">Go Home</StyledLink>
+			</div>
+			<div>
+				<StyledLink to="/game">Play Again</StyledLink>
+			</div>
 		</div>
 	);
 }
