@@ -16,6 +16,7 @@ import { lightTheme, darkTheme } from './styled/Themes';
 import { useAuth0 } from './auth';
 import useTheme from './hooks/UseTheme';
 import Loader from './styled/Loader';
+import Countdown from './pages/Countdown';
 
 function App() {
 	const { loading } = useAuth0();
@@ -36,6 +37,9 @@ function App() {
 						<Container>
 							<Navbar toggleTheme={toggleTheme} />
 							<Switch>
+								<Route path="/countdown">
+									<Countdown />
+								</Route>
 								<Route path="/game">
 									<Game />
 								</Route>
