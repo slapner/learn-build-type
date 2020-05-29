@@ -24,7 +24,6 @@ const validateAccessToken = async (token) => {
 
 	try {
 		const decoded = jwt.verify(token, signingKey);
-		console.log(decoded);
 		return decoded;
 	} catch (error) {
 		console.error(error);
