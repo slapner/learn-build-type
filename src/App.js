@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { ThemeProvider } from 'styled-components';
 
 import Navbar from './components/Navbar';
 import Home from './pages/Home';
@@ -10,37 +11,42 @@ import GameOver from './pages/GameOver';
 import { Container } from './styled/Container';
 import { Main } from './styled/Main';
 import GlobalStyle from './styled/Global';
+import { lightTheme, darkTheme } from './styled/Themes';
 
 import { useAuth0 } from './auth';
 
 function App() {
 	const { loading } = useAuth0();
+	const theme = 'light';
+	const currentTheme = theme === 'light' ? lightTheme : darkTheme;
 
 	return (
 		<Router>
-			<GlobalStyle />
-			<Main>
-				{loading && <p>Loading...</p>}
-				{!loading && (
-					<Container>
-						<Navbar />
-						<Switch>
-							<Route path="/game">
-								<Game />
-							</Route>
-							<Route path="/highScores">
-								<HighScores />
-							</Route>
-							<Route path="/gameOver">
-								<GameOver />
-							</Route>
-							<Route path="/">
-								<Home />
-							</Route>
-						</Switch>
-					</Container>
-				)}
-			</Main>
+			<ThemeProvider theme={currentTheme}>
+				<GlobalStyle />
+				<Main>
+					{loading && <p>Loading...</p>}
+					{!loading && (
+						<Container>
+							<Navbar />
+							<Switch>
+								<Route path="/game">
+									<Game />
+								</Route>
+								<Route path="/highScores">
+									<HighScores />
+								</Route>
+								<Route path="/gameOver">
+									<GameOver />
+								</Route>
+								<Route path="/">
+									<Home />
+								</Route>
+							</Switch>
+						</Container>
+					)}
+				</Main>
+			</ThemeProvider>
 		</Router>
 	);
 }
