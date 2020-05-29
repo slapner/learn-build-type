@@ -9,38 +9,37 @@ import GameOver from './pages/GameOver';
 
 import { Container } from './styled/Container';
 import { Main } from './styled/Main';
-import Global from './styled/Global';
+import GlobalStyle from './styled/Global';
 
 import { useAuth0 } from './auth';
 
 function App() {
 	const { loading } = useAuth0();
 
-	if (loading) {
-		return <div>Loading...</div>;
-	}
-
 	return (
 		<Router>
-			<Global />
+			<GlobalStyle />
 			<Main>
-				<Container>
-					<Navbar />
-					<Switch>
-						<Route path="/game">
-							<Game />
-						</Route>
-						<Route path="/highScores">
-							<HighScores />
-						</Route>
-						<Route path="/gameOver">
-							<GameOver />
-						</Route>
-						<Route path="/">
-							<Home />
-						</Route>
-					</Switch>
-				</Container>
+				{loading && <p>Loading...</p>}
+				{!loading && (
+					<Container>
+						<Navbar />
+						<Switch>
+							<Route path="/game">
+								<Game />
+							</Route>
+							<Route path="/highScores">
+								<HighScores />
+							</Route>
+							<Route path="/gameOver">
+								<GameOver />
+							</Route>
+							<Route path="/">
+								<Home />
+							</Route>
+						</Switch>
+					</Container>
+				)}
 			</Main>
 		</Router>
 	);
